@@ -22,6 +22,12 @@ export default function Navbar() {
          Home
        </Link>
        <Link
+         href="/dashboard"
+         className={`hover:text-blue-600 transition-colors ${pathname === "/dashboard" ? "text-blue-600 font-medium" : ""}`}
+       >
+         Dashboard
+       </Link>
+       <Link
          href="/about"
          className={`hover:text-blue-600 transition-colors ${pathname === "/about" ? "text-blue-600 font-medium" : ""}`}
        >
