@@ -4,20 +4,36 @@
 import { useEffect, useState } from 'react';
 import { useTasks } from '@/mockData/useTasks';
 
-const tasksData = useTasks();
-type Task = typeof tasksData.tasks[0];
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  priority: string;
+  status: string;
+  dueDate: string;
+  tags: string[];
+  assignee?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
 export default function TasksOverview() {
  const [tasks, setTasks] = useState<Task[]>([]);
  const [filter, setFilter] = useState('all');
+  const tasksData = useTasks();
 
 
  useEffect(() => {
-   // Sort tasks by due date (closest first)
-   const sortedTasks = [...tasksData.tasks].sort((a, b) => {
-     return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
-   });
+   // Sort tasks by due date (closest first) and ensure assignee is a string
+   const sortedTasks = [...tasksData.tasks]
+     .map(task => ({
+       ...task,
+       assignee: task.assignee === null ? "" : task.assignee
+     }))
+     .sort((a, b) => {
+       return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+     });
   
    setTasks(sortedTasks);
  }, []);
@@ -80,6 +96,8 @@ export default function TasksOverview() {
 
 
 function TaskItem({ task }: { task: Task }) {
+    const tasksData = useTasks();
+
  // Get status info
  const status = tasksData.statuses.find(s => s.name === task.status);
  const statusColor = status?.color || '#E5E7EB';

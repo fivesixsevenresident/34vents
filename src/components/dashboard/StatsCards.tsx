@@ -4,8 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useProjects } from '@/mockData/useProjects';
 
-const projectsData = useProjects();
-const tasksData = projectsData.tasks
+
 
 
 export default function StatsCards() {
@@ -15,6 +14,8 @@ export default function StatsCards() {
    completedTasks: 0,
    pendingTasks: 0
  });
+ const projectsData = useProjects();
+const tasksData = projectsData.tasks
 
 
  useEffect(() => {

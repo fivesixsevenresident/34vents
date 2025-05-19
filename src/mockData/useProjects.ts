@@ -1,10 +1,9 @@
 import { useTasks } from "./useTasks";
 
+
 const useProjects = () => {
     const tasksData = useTasks();
-  return {
-    tasks: tasksData,
-    projects: [
+    const projectsData = [
       {
         id: "project-1",
         name: "Website Redesign",
@@ -65,7 +64,10 @@ const useProjects = () => {
         createdAt: "2025-05-05T10:30:00Z",
         updatedAt: "2025-05-19T10:30:00Z",
       },
-    ],
+    ]
+  return {
+    tasks: tasksData,
+    projects: projectsData,
     projectStatuses: [
       {
         id: "status-1",
