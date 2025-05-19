@@ -2,8 +2,10 @@
 
 
 import { useEffect, useState } from 'react';
-import projectsData from '@/mockdata/projects.json';
-import tasksData from '@/mockdata/tasks.json';
+import { useProjects } from '@/mockData/useProjects';
+
+const projectsData = useProjects();
+const tasksData = projectsData.tasks
 
 
 export default function StatsCards() {
