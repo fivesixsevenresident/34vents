@@ -36,7 +36,7 @@ export default function TasksOverview() {
      });
   
    setTasks(sortedTasks);
- }, []);
+ }, [tasksData.tasks]);
 
 
  const filteredTasks = tasks.filter(task => {

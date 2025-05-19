@@ -1,6 +1,12 @@
 import React from "react";
 import { useAboutInfo } from '../../mockData/useAboutInfo'
 
+
+interface Section {
+  heading: string;
+  content: string;
+}
+
 export default function About() {
   const aboutData = useAboutInfo();
   return (
@@ -9,7 +15,7 @@ export default function About() {
 
       <p className="text-lg mb-8 text-gray-700">{aboutData.mission}</p>
 
-      {aboutData.sections.map((section: any, index: number) => (
+      {aboutData.sections.map((section: Section, index: number) => (
         <section key={index} className="mb-8">
           <h2 className="text-2xl font-semibold mb-3">{section.heading}</h2>
           <p className="text-gray-700">{section.content}</p>

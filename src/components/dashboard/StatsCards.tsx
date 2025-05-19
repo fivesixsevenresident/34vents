@@ -32,7 +32,7 @@ const tasksData = projectsData.tasks
      completedTasks,
      pendingTasks
    });
- }, []);
+ }, [projectsData.projects, tasksData.tasks]);
 
 
  return (

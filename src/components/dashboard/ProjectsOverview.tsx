@@ -28,7 +28,7 @@ export default function ProjectsOverview() {
       (a, b) => b.progress - a.progress
     );
     setProjects(sortedProjects);
-  }, []);
+  }, [projectsData.projects]);
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
