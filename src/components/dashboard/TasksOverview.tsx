@@ -2,9 +2,9 @@
 
 
 import { useEffect, useState } from 'react';
-import tasksData from '@/mockdata/tasks.json';
+import { useTasks } from '@/mockData/useTasks';
 
-
+const tasksData = useTasks();
 type Task = typeof tasksData.tasks[0];
 
 

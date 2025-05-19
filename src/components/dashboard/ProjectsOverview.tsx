@@ -2,16 +2,16 @@
 
 
 import { useEffect, useState } from 'react';
-import projectsData from '@/mockdata/projects.json';
-import tasksData from '@/mockdata/tasks.json';
+import { useProjects } from '@/mockData/useProjects';
 
+const projectsData = useProjects();
+const tasksData = projectsData.tasks
 
 type Project = typeof projectsData.projects[0];
 
 
 export default function ProjectsOverview() {
  const [projects, setProjects] = useState<Project[]>([]);
-
 
  useEffect(() => {
    // Get projects and sort by progress
