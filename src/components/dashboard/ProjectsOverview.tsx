@@ -10,15 +10,15 @@ type Project = ReturnType<typeof fetchProjects>["projects"][number];
 
 export default function ProjectsOverview() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const projectsData = fetchProjects();
 
   useEffect(() => {
+    const projectsData = fetchProjects();
     // Get projects and sort by progress
     const sortedProjects = [...projectsData.projects].sort(
       (a, b) => b.progress - a.progress
     );
     setProjects(sortedProjects);
-  }, [projectsData.projects]);
+  }, []);
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">

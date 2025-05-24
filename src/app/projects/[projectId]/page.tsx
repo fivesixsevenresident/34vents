@@ -2,6 +2,7 @@
 
 import { fetchProjects } from "@/mockData/fetchProjects";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -37,7 +38,7 @@ export default function ProjectDetailPage() {
     );
 
     setProjectTasks(tasks);
-  }, [projectId, router]);
+  }, [projectId, projectsData.projects, router, tasksData.tasks]);
   // Filter tasks based on selected status
   const filteredTasks = projectTasks.filter((task) => {
     if (taskFilter === "all") return true;
@@ -171,7 +172,7 @@ export default function ProjectDetailPage() {
                   >
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
                       {user?.avatarUrl ? (
-                        <img
+                        <Image
                           src={user.avatarUrl}
                           alt={user.name}
                           className="w-full h-full object-cover"
@@ -359,7 +360,7 @@ export default function ProjectDetailPage() {
                         <div className="flex items-center">
                           <div className="w-5 h-5 rounded-full overflow-hidden mr-1">
                             {assignee.avatarUrl ? (
-                              <img
+                              <Image
                                 src={assignee.avatarUrl}
                                 alt={assignee.name}
                                 className="w-full h-full object-cover"
