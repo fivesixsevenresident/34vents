@@ -1,10 +1,8 @@
 "use client";
 
 
-import { useEffect, useState } from 'react';
-import { useProjects } from '@/mockData/useProjects';
-
-
+import { fetchProjects } from "@/mockData/fetchProjects";
+import { useEffect, useState } from "react";
 
 
 export default function StatsCards() {
@@ -12,25 +10,31 @@ export default function StatsCards() {
    totalProjects: 0,
    activeProjects: 0,
    completedTasks: 0,
-   pendingTasks: 0
+   pendingTasks: 0,
  });
- const projectsData = useProjects();
-const tasksData = projectsData.tasks
+ const projectsData = fetchProjects();
+ const tasksData = projectsData.tasks;
 
 
  useEffect(() => {
    // Calculate stats from mock data
    const totalProjects = projectsData.projects.length;
-   const activeProjects = projectsData.projects.filter(project => project.status === 'active').length;
-   const completedTasks = tasksData.tasks.filter(task => task.status === 'completed').length;
-   const pendingTasks = tasksData.tasks.filter(task => task.status !== 'completed').length;
+   const activeProjects = projectsData.projects.filter(
+     (project) => project.status === "active"
+   ).length;
+   const completedTasks = tasksData.tasks.filter(
+     (task) => task.status === "completed"
+   ).length;
+   const pendingTasks = tasksData.tasks.filter(
+     (task) => task.status !== "completed"
+   ).length;
 
 
    setStats({
      totalProjects,
      activeProjects,
      completedTasks,
-     pendingTasks
+     pendingTasks,
    });
  }, [projectsData.projects, tasksData.tasks]);
 
@@ -92,3 +96,10 @@ function StatCard({ title, value, icon, color, textColor }: StatCardProps) {
    </div>
  );
 }
+
+
+
+
+
+
+

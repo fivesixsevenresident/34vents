@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { fetchProjects } from "@/mockData/fetchProjects";
 import Link from "next/link";
-import { useProjects } from "@/mockData/useProjects";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -16,7 +16,7 @@ export default function ProjectDetailPage() {
     (typeof tasksData.tasks)[0][]
   >([]);
   const [taskFilter, setTaskFilter] = useState("all");
-  const projectsData = useProjects();
+  const projectsData = fetchProjects();
   const tasksData = projectsData.tasks;
 
   useEffect(() => {

@@ -1,7 +1,7 @@
-import { useTasks } from "./useTasks";
+import { fetchTasks } from "./fetchTasks";
 
-const useProjects = () => {
-  const tasksData = useTasks();
+const fetchProjects = () => {
+  const tasksData = fetchTasks();
   const projectsData = [
     {
       id: "project-1",
@@ -102,4 +102,4 @@ const useProjects = () => {
   };
 };
 
-export { useProjects, useTasks };
+export { fetchProjects, fetchTasks };

@@ -1,4 +1,4 @@
-const useAboutInfo = () => {
+const fetchAboutInfo = () => {
   return {
     title: "About SamplePlay",
     mission:
@@ -41,4 +41,4 @@ const useAboutInfo = () => {
   };
 };
 
-export { useAboutInfo };
+export { fetchAboutInfo };

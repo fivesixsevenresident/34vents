@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useProjects } from "@/mockData/useProjects";
+import { fetchProjects } from "@/mockData/fetchProjects";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const projectsData = useProjects();
-type Project = (typeof projectsData.projects)[0];
+const projectsData = fetchProjects();
+type Project = ReturnType<typeof fetchProjects>["projects"][number];
 
 export default function ProjectsOverview() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const projectsData = useProjects();
+  const projectsData = fetchProjects();
 
   useEffect(() => {
     // Get projects and sort by progress
@@ -18,7 +18,7 @@ export default function ProjectsOverview() {
       (a, b) => b.progress - a.progress
     );
     setProjects(sortedProjects);
-  }, []);
+  }, [projectsData.projects]);
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
@@ -107,9 +107,11 @@ function ProjectCard({ project }: { project: Project }) {
                 title={user?.name || member}
               >
                 {user?.avatarUrl ? (
-                  <img
+                  <Image
                     src={user.avatarUrl}
                     alt={user.name}
+                    width={24}
+                    height={24}
                     className="w-full h-full object-cover"
                   />
                 ) : (
