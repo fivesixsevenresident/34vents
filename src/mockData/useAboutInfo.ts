@@ -1,5 +1,3 @@
-import { use } from "react";
-
 const useAboutInfo = () => {
   return {
     title: "About SamplePlay",
