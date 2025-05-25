@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -12,7 +12,7 @@ export default function Navbar() {
  return (
    <nav className="flex items-center justify-between w-full px-6 py-4 bg-white shadow-sm">
      <Link href="/" className="text-xl font-bold">
-       34 Vent
+       SamplePlay
      </Link>
      <div className="flex gap-6">
        <Link
@@ -26,6 +26,18 @@ export default function Navbar() {
          className={`hover:text-blue-600 transition-colors ${pathname === "/dashboard" ? "text-blue-600 font-medium" : ""}`}
        >
          Dashboard
+       </Link>
+       <Link
+         href="/projects"
+         className={`hover:text-blue-600 transition-colors ${pathname.startsWith("/projects") ? "text-blue-600 font-medium" : ""}`}
+       >
+         Projects
+       </Link>
+       <Link
+         href="/tasks"
+         className={`hover:text-blue-600 transition-colors ${pathname.startsWith("/tasks") ? "text-blue-600 font-medium" : ""}`}
+       >
+         Tasks
        </Link>
        <Link
          href="/about"
@@ -43,4 +55,6 @@ export default function Navbar() {
    </nav>
  );
 }
+
+
 
