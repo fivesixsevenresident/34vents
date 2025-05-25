@@ -1,4 +1,4 @@
-const useTasks = () => {
+const fetchTasks = () => {
   return {
     tasks: [
       {
@@ -246,4 +246,4 @@ const useTasks = () => {
   };
 };
 
-export { useTasks };
+export { fetchTasks };

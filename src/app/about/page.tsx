@@ -1,6 +1,5 @@
 import React from "react";
-import { useAboutInfo } from '../../mockData/useAboutInfo'
-
+import { fetchAboutInfo } from "../../mockData/fetchAboutInfo";
 
 interface Section {
   heading: string;
@@ -8,7 +7,7 @@ interface Section {
 }
 
 export default function About() {
-  const aboutData = useAboutInfo();
+  const aboutData = fetchAboutInfo();
   return (
     <div className="max-w-4xl mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6">{aboutData.title}</h1>

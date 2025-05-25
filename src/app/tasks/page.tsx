@@ -5,15 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-type TasksProps = ReturnType<typeof fetchTasks>["tasks"][number];
+type TaskProps = ReturnType<typeof fetchTasks>["tasks"][number];
 
 export default function TasksPage() {
-  const [tasks, setTasks] = useState<TasksProps[]>([]);
+  const [tasks, setTasks] = useState<TaskProps[]>([]);
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     const tasksData = fetchTasks();
-    // Sort tasks by due date (closest first)
     const sortedTasks = [...tasksData.tasks].sort((a, b) => {
       return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
     });
@@ -44,7 +43,7 @@ export default function TasksPage() {
                   : "hover:bg-gray-50"
               }`}
             >
-              All ({tasks.length})
+              All
             </button>
             <button
               onClick={() => setFilter("todo")}
@@ -54,7 +53,7 @@ export default function TasksPage() {
                   : "hover:bg-gray-50"
               }`}
             >
-              To Do ({tasks.filter((t) => t.status === "todo").length})
+              To Do
             </button>
             <button
               onClick={() => setFilter("in-progress")}
@@ -64,18 +63,7 @@ export default function TasksPage() {
                   : "hover:bg-gray-50"
               }`}
             >
-              In Progress (
-              {tasks.filter((t) => t.status === "in-progress").length})
-            </button>
-            <button
-              onClick={() => setFilter("completed")}
-              className={`px-3 py-1 rounded-md ${
-                filter === "completed"
-                  ? "bg-gray-100 font-medium"
-                  : "hover:bg-gray-50"
-              }`}
-            >
-              Completed ({tasks.filter((t) => t.status === "completed").length})
+              In Progress
             </button>
           </div>
         </div>
@@ -84,62 +72,36 @@ export default function TasksPage() {
           {filteredTasks.map((task) => (
             <TaskItem key={task.id} task={task} />
           ))}
-
-          {filteredTasks.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              No tasks found matching the selected filter.
-            </div>
-          )}
         </div>
       </div>
     </div>
   );
 }
 
-function TaskItem({ task }: { task: TasksProps }) {
+function TaskItem({ task }: { task: TaskProps }) {
   const tasksData = fetchTasks();
   const status = tasksData.statuses.find((s) => s.name === task.status);
   const statusColor = status?.color || "#E5E7EB";
-  const priority = tasksData.priorities.find((p) => p.name === task.priority);
-  const priorityColor = priority?.color || "#E5E7EB";
   const assignee = tasksData.users.find(
     (user) => user.username === task.assignee
   );
 
-  const now = new Date();
-  const dueDate = new Date(task.dueDate);
-  const diffDays = Math.ceil(
-    (dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-  );
-  const isDueSoon = diffDays >= 0 && diffDays <= 3;
-  const isOverdue = diffDays < 0;
-
   return (
     <Link
-      href={`/tasks/${task.id}?from=/dashboard`}
+      href={`/tasks/${task.id}?from=/tasks`}
       className="block border border-gray-100 rounded-md p-4 hover:bg-gray-50 hover:border-blue-300 transition-colors"
     >
       <div className="flex justify-between items-start mb-3">
-        <h3 className="font-medium text-gray-900 text-lg">{task.title}</h3>
-        <div className="flex space-x-2">
-          <span
-            className="px-2 py-1 text-xs rounded-full"
-            style={{ backgroundColor: statusColor }}
-          >
-            {status?.displayName || task.status}
-          </span>
-          <span
-            className="px-2 py-1 text-xs rounded-full"
-            style={{ backgroundColor: priorityColor }}
-          >
-            {priority?.displayName || task.priority}
-          </span>
-        </div>
+        <h3 className="font-medium text-gray-900">{task.title}</h3>
+        <span
+          className="px-2 py-1 text-xs rounded-full"
+          style={{ backgroundColor: statusColor }}
+        >
+          {status?.displayName || task.status}
+        </span>
       </div>
 
-      <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-        {task.description}
-      </p>
+      <p className="text-sm text-gray-600 mb-4">{task.description}</p>
 
       <div className="flex justify-between items-center text-sm">
         <div className="flex items-center">
@@ -166,17 +128,7 @@ function TaskItem({ task }: { task: TasksProps }) {
             <span className="text-gray-400">Unassigned</span>
           )}
         </div>
-
-        <div
-          className={`
-          ${isOverdue ? "text-red-600 font-medium" : ""}
-          ${isDueSoon && !isOverdue ? "text-amber-600 font-medium" : ""}
-          ${!isDueSoon && !isOverdue ? "text-gray-500" : ""}
-        `}
-        >
-          {isOverdue ? "� Overdue: " : ""}
-          Due {task.dueDate}
-        </div>
+        <span className="text-gray-500">Due {task.dueDate}</span>
       </div>
     </Link>
   );
