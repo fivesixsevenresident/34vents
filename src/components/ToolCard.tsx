@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 
 interface Tool {
   id: string;
@@ -25,11 +26,14 @@ export default function ToolCard({ tool }: ToolCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
       <div className="aspect-w-16 aspect-h-12">
-        <img
+        <Image
           src={imageError ? defaultImage : tool.image}
           alt={tool.name}
+          width={400}
+          height={192}
           className="w-full h-48 object-cover"
           onError={handleImageError}
+          unoptimized={imageError}
         />
       </div>
 

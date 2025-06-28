@@ -1,6 +1,7 @@
+"use client";
 import React from "react";
 import Link from "next/link";
-import { fetchWhy } from "../../mockData/fetchWhy";
+import { useWhy } from "../../hooks/useContent";
 
 interface Reason {
   heading: string;
@@ -15,7 +16,31 @@ interface Testimonial {
 }
 
 export default function Why() {
-  const whyData = fetchWhy();
+  const { whyData, isLoading, error } = useWhy();
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 text-center">
+        <div className="text-lg text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 text-center">
+        <div className="text-lg text-red-600">Error: {error}</div>
+      </div>
+    );
+  }
+
+  if (!whyData) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 text-center">
+        <div className="text-lg text-gray-600">No data available</div>
+      </div>
+    );
+  }
   return (
     <div className="max-w-4xl mx-auto p-8">
       <h1 className="text-3xl font-bold mb-4">{whyData.title}</h1>

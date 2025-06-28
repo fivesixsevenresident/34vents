@@ -1,5 +1,6 @@
+"use client";
 import React from "react";
-import { fetchAboutInfo } from "../../mockData/fetchAboutInfo";
+import { useAbout } from "../../hooks/useContent";
 
 interface Section {
   heading: string;
@@ -7,7 +8,31 @@ interface Section {
 }
 
 export default function About() {
-  const aboutData = fetchAboutInfo();
+  const { aboutData, isLoading, error } = useAbout();
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 text-center">
+        <div className="text-lg text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 text-center">
+        <div className="text-lg text-red-600">Error: {error}</div>
+      </div>
+    );
+  }
+
+  if (!aboutData) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 text-center">
+        <div className="text-lg text-gray-600">No data available</div>
+      </div>
+    );
+  }
   return (
     <div className="max-w-4xl mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6">{aboutData.title}</h1>

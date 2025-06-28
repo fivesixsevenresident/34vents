@@ -1,6 +1,6 @@
-"use client"
+"use client";
 import React from "react";
-import { fetchTools } from "../../mockData/fetchTools";
+import { useTools } from "../../hooks/useContent";
 import ToolCard from "../../components/ToolCard";
 
 interface Tool {
@@ -14,7 +14,31 @@ interface Tool {
 }
 
 export default function Tools() {
-  const toolsData = fetchTools();
+  const { toolsData, isLoading, error } = useTools();
+
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto p-8 text-center">
+        <div className="text-lg text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-6xl mx-auto p-8 text-center">
+        <div className="text-lg text-red-600">Error: {error}</div>
+      </div>
+    );
+  }
+
+  if (!toolsData) {
+    return (
+      <div className="max-w-6xl mx-auto p-8 text-center">
+        <div className="text-lg text-gray-600">No data available</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-8">

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { useTheme } from "../../contexts/ThemeContext";
-import { fetchUserProfile } from "../../mockData/fetchUserProfile";
+import { useProfile } from "../../hooks/useProfile";
 
 interface EquipmentItem {
   id: string;
@@ -57,6 +57,11 @@ export default function Profile() {
   const { user } = useUser();
   const { theme, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState("personal");
+  const {
+    profile: profileData,
+    isLoading,
+    error,
+  } = useProfile(user?.type === "technician" ? "technician" : "client");
 
   if (!user) {
     return (
@@ -73,7 +78,29 @@ export default function Profile() {
     );
   }
 
-  const profileData = fetchUserProfile(user.type);
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto p-8 text-center">
+        <div className="text-lg text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-6xl mx-auto p-8 text-center">
+        <div className="text-lg text-red-600">Error: {error}</div>
+      </div>
+    );
+  }
+
+  if (!profileData) {
+    return (
+      <div className="max-w-6xl mx-auto p-8 text-center">
+        <div className="text-lg text-gray-600">No profile data available</div>
+      </div>
+    );
+  }
 
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
