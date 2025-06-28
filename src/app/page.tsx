@@ -3,8 +3,10 @@
 import React from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useProblems } from "../hooks/useProblems";
+import { fetchClientProblems } from "../mockData/fetchClientProblems";
+import { fetchTechnicianProblems } from "../mockData/fetchTechnicianProblems";
 import { useUser } from "../contexts/UserContext";
+import ProblemListItem from "../components/ProblemListItem";
 import { DateTimeSlot } from "../components/DateSelector";
 
 export default function Home() {
@@ -29,27 +31,14 @@ export default function Home() {
       }));
     }
   }
+  const clientProblemsData = fetchClientProblems();
+  const technicianProblemsData = fetchTechnicianProblems();
   // Determine which data to show based on user type
   const isClient = user?.type === "client";
   const isTechnician = user?.type === "technician";
-  const { clientProblems, technicianProblems, isLoading, error } =
-    useProblems();
-
-  if (isLoading && user) {
-    return (
-      <div className="max-w-4xl mx-auto p-8 text-center">
-        <div className="text-lg text-gray-600">Loading...</div>
-      </div>
-    );
-  }
-
-  if (error && user) {
-    return (
-      <div className="max-w-4xl mx-auto p-8 text-center">
-        <div className="text-lg text-red-600">Error: {error}</div>
-      </div>
-    );
-  }
+  const problemsData = isTechnician
+    ? technicianProblemsData
+    : clientProblemsData;
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -307,6 +296,155 @@ export default function Home() {
       )}
 
       {/* Problems/Service History Section */}
+      {user && (
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              {problemsData.title}
+            </h2>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {isTechnician
+                ? `Technician since ${new Date(
+                    technicianProblemsData.technician.memberSince
+                  ).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                  })}`
+                : `Member since ${new Date(
+                    clientProblemsData.stats.memberSince
+                  ).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                  })}`}
+            </div>
+          </div>
+
+          {/* Stats Overview */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            {isTechnician ? (
+              <>
+                <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {technicianProblemsData.stats.totalAssignedJobs}
+                  </div>
+                  <div className="text-sm text-blue-800 dark:text-blue-300">
+                    Assigned Jobs
+                  </div>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {technicianProblemsData.stats.completedToday}
+                  </div>
+                  <div className="text-sm text-green-800 dark:text-green-300">
+                    Completed Today
+                  </div>
+                </div>
+                <div className="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+                    {technicianProblemsData.stats.averageRating}
+                  </div>
+                  <div className="text-sm text-yellow-800 dark:text-yellow-300">
+                    Avg Rating
+                  </div>
+                </div>
+                <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                    {technicianProblemsData.stats.totalRevenueThisMonth}
+                  </div>
+                  <div className="text-sm text-purple-800 dark:text-purple-300">
+                    Monthly Revenue
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {clientProblemsData.stats.totalServices}
+                  </div>
+                  <div className="text-sm text-blue-800 dark:text-blue-300">
+                    Total Services
+                  </div>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {clientProblemsData.stats.completedServices}
+                  </div>
+                  <div className="text-sm text-green-800 dark:text-green-300">
+                    Completed
+                  </div>
+                </div>
+                <div className="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+                    {clientProblemsData.stats.averageRating}
+                  </div>
+                  <div className="text-sm text-yellow-800 dark:text-yellow-300">
+                    Avg Rating
+                  </div>
+                </div>
+                <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                    {clientProblemsData.stats.totalSpent}
+                  </div>
+                  <div className="text-sm text-purple-800 dark:text-purple-300">
+                    Total Spent
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Today's Schedule for Technicians */}
+          {isTechnician && (
+            <div className="mb-6 p-4 bg-orange-50 dark:bg-orange-900 border border-orange-200 dark:border-orange-700 rounded-lg">
+              <h3 className="text-lg font-semibold text-orange-800 dark:text-orange-200 mb-3">
+                Today&apos;s Schedule
+              </h3>
+              <div className="space-y-2">
+                {technicianProblemsData.todaySchedule.map(
+                  (appointment, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-white dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700"
+                    >
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">
+                          {appointment.time} - {appointment.client}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {appointment.type}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-500">
+                          {appointment.location}
+                        </div>
+                      </div>
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-medium ${
+                          appointment.priority === "urgent"
+                            ? "bg-red-100 text-red-800"
+                            : appointment.priority === "high"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-blue-100 text-blue-800"
+                        }`}
+                      >
+                        {appointment.priority}
+                      </span>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Problems List */}
+          <div className="space-y-4">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {problemsData.problems.map((problem: any) => (
+              <ProblemListItem key={problem.id} problem={problem} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Additional Resources */}
       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
