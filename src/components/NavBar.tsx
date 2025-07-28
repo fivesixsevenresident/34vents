@@ -51,6 +51,9 @@ export default function Navbar() {
         <NavLink href="/tools">Tools</NavLink>
         <NavLink href="/common-issues">Issues</NavLink>
         <NavLink href="/contact">Contact</NavLink>
+        {user && user.type === "admin" && (
+          <NavLink href="/paradise-city">Paradise City</NavLink>
+        )}
 
         {user ? (
           <div className="relative" ref={dropdownRef}>

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface User {
   email: string;
-  type: "client" | "technician";
+  type: "client" | "technician" | "admin";
   name: string;
   id: string;
 }
@@ -16,7 +16,8 @@ interface UserContextType {
     email: string,
     password: string,
     firstName: string,
-    lastName: string
+    lastName: string,
+    role?: string
   ) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   isLoading: boolean;
@@ -30,7 +31,7 @@ const mockUsers: Record<
   {
     email: string;
     password: string;
-    type: "client" | "technician";
+    type: "client" | "technician" | "admin";
     name: string;
     id: string;
   }
@@ -70,7 +71,7 @@ const saveUserToStorage = (
   userData: {
     email: string;
     password: string;
-    type: "client" | "technician";
+    type: "client" | "technician" | "admin";
     name: string;
     id: string;
   }
@@ -136,7 +137,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     email: string,
     password: string,
     firstName: string,
-    lastName: string
+    lastName: string,
+    role: string = "client"
   ): Promise<{ success: boolean; error?: string }> => {
     setIsLoading(true);
 
@@ -161,12 +163,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       };
     }
 
-    // Create new user (always as client for account creation)
-    const newUserId = `client-${Date.now()}`;
+    // Create new user with selected role
+    const newUserId = `${role}-${Date.now()}`;
     const newUserData = {
       email,
       password,
-      type: "client" as const,
+      type: role as "client" | "technician" | "admin",
       name: `${firstName} ${lastName}`,
       id: newUserId,
     };
