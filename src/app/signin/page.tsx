@@ -17,6 +17,7 @@ export default function SignIn() {
     firstName: "",
     lastName: "",
     phone: "",
+    role: "client",
   });
 
   const problem = searchParams.get("problem");
@@ -93,7 +94,8 @@ export default function SignIn() {
         formData.email,
         formData.password,
         formData.firstName,
-        formData.lastName
+        formData.lastName,
+        formData.role
       );
 
       if (result.success) {
@@ -124,6 +126,7 @@ export default function SignIn() {
       firstName: "",
       lastName: "",
       phone: "",
+      role: "client",
     });
   };
 
@@ -309,6 +312,32 @@ export default function SignIn() {
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     We&apos;ll use this to contact you about your service
                     requests
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="role"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    I am a
+                  </label>
+                  <div className="mt-1">
+                    <select
+                      id="role"
+                      name="role"
+                      required={!isLogin}
+                      value={formData.role}
+                      onChange={handleInputChange}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white sm:text-sm"
+                    >
+                      <option value="client">Client (I need plumbing help)</option>
+                      <option value="technician">Technician (I provide plumbing services)</option>
+                      <option value="admin">Administrator</option>
+                    </select>
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    Select your account type to access the right features
                   </p>
                 </div>
               </>
